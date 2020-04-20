@@ -24,7 +24,7 @@ from mpl_toolkits.basemap import Basemap, cm
 def showHelp(logger):
 
     logger.info("This script plots the area of a NetCDF file.")
-    logger.info("Invoke this script with --inputFile=<FILE>")
+    logger.info("Invoke this script with --inputFile=<FILE> --latVariable=<LATVAR> --lonVariable=<LONVAR>")
 
 
 #############################################################
@@ -56,11 +56,15 @@ if __name__ == "__main__":
 
     inputFile = None
     try:
-        options, rem = getopt.getopt(sys.argv[1:], 'i:h', ['inputFile=', 'help'])
+        options, rem = getopt.getopt(sys.argv[1:], 'i:h', ['inputFile=', 'help', 'latVariable=', 'lonVariable='])
     
         for opt, arg in options:
             if opt in ('-i', '--inputFile'):
                 inputFile = arg
+            elif opt in ('--latVariable'):                
+                latVar = arg
+            elif opt in ('--lonVariable'):                
+                lonVar = arg                                
             elif opt in ('-h', '--help'):
                 showHelp(logger)
                 sys.exit(0)
@@ -85,10 +89,10 @@ if __name__ == "__main__":
     ds = Dataset(inputFile, "r")
 
     # get coordinates
-    latMin = ds.variables['lat'][:].data.min()
-    latMax = ds.variables['lat'][:].data.max()
-    lonMin = ds.variables['lon'][:].data.min()
-    lonMax = ds.variables['lon'][:].data.max()
+    latMin = ds.variables[latVar][:].data.min()
+    latMax = ds.variables[latVar][:].data.max()
+    lonMin = ds.variables[lonVar][:].data.min()
+    lonMax = ds.variables[lonVar][:].data.max()
     logger.debug("Latitude bounds are %s and %s" % (latMin, latMax))
     logger.debug("Longitude bounds are %s and %s" % (lonMin, lonMax))
     
