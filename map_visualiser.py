@@ -118,9 +118,13 @@ def plotWinds(ds, inputFile, windVar):
     plt.title(inputFile)
 
     # get data for winds
-    lons = ds.variables[lonVar][:]
-    lats = ds.variables[latVar][:]
-    tmax = ds.variables[windVar][0,:,:]
+    try:
+        lons = ds.variables[lonVar][:]
+        lats = ds.variables[latVar][:]
+        tmax = ds.variables[windVar][0,:,:]
+    except KeyError:
+        logger.error("Check your variables!")
+        sys.exit(1)        
     lon, lat = np.meshgrid(lons, lats)
     xi, yi = m(lon, lat)
     cs = m.pcolor(xi, yi, np.squeeze(tmax))
@@ -131,23 +135,47 @@ def plotWinds(ds, inputFile, windVar):
 
 #############################################################
 #
-# Plot Temperature
-#
-#############################################################
-
-def plotTemperature(ds, inputFile, tempVar):
-    logger.error("Not yet implemented")
-
-    
-#############################################################
-#
 # Plot Currents
 #
 #############################################################
 
-def plotCurrents(ds, inputFile, currentsVar):
-    logger.error("Not yet implemented")
+def plotCurrents(ds, inputFile, tempVar):
+
+    # get boundaries
+    latMin, latMax, lonMin, lonMax = getBoundaries(ds)
     
+    # plot them
+    m = Basemap(projection='merc',
+                llcrnrlat=latMin, urcrnrlat=latMax,
+                llcrnrlon=lonMin, urcrnrlon=lonMax,                    
+                resolution='l')
+
+    # Add Coastlines, States, and Country Boundaries
+    m.drawcoastlines()
+    m.drawstates()
+    m.drawcountries()
+
+    # add color
+    m.fillcontinents(color='coral',lake_color='aqua')
+
+    # set the title
+    plt.title(inputFile)
+
+    # get data for winds
+    try:
+        lons = ds.variables[lonVar][:]
+        lats = ds.variables[latVar][:]
+        tmax = ds.variables[tempVar][0,0,:,:]
+    except KeyError:
+        logger.error("Check your variables!")
+        sys.exit(1)        
+    lon, lat = np.meshgrid(lons, lats)
+    xi, yi = m(lon, lat)
+    cs = m.pcolor(xi, yi, np.squeeze(tmax))
+    
+    # show the plot
+    plt.show()
+        
 
 #############################################################
 #
@@ -222,8 +250,6 @@ if __name__ == "__main__":
         plotWinds(ds, inputFile, plotVar)
     elif function == "currents":
         plotCurrents(ds, inputFile, plotVar)
-    elif function == "temperature":
-        plotTemperature(ds, inputFile, plotVar)
     
     # close file
     ds.close()
