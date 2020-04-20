@@ -89,10 +89,15 @@ if __name__ == "__main__":
     ds = Dataset(inputFile, "r")
 
     # get coordinates
-    latMin = ds.variables[latVar][:].data.min()
-    latMax = ds.variables[latVar][:].data.max()
-    lonMin = ds.variables[lonVar][:].data.min()
-    lonMax = ds.variables[lonVar][:].data.max()
+    try:
+        latMin = ds.variables[latVar][:].data.min()
+        latMax = ds.variables[latVar][:].data.max()
+        lonMin = ds.variables[lonVar][:].data.min()
+        lonMax = ds.variables[lonVar][:].data.max()
+    except KeyError:
+        logger.error("Check your variables!")
+        sys.exit(1)
+        
     logger.debug("Latitude bounds are %s and %s" % (latMin, latMax))
     logger.debug("Longitude bounds are %s and %s" % (lonMin, lonMax))
     
