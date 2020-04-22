@@ -20,6 +20,7 @@
 import csv
 import pdb
 import sys
+import math
 import getopt
 import logging
 import numpy as np
@@ -174,8 +175,8 @@ if __name__ == "__main__":
                 u_np_lon.append(u10_values[curr_lat][curr_lon])
                 v_np_lon.append(v10_values[curr_lat][curr_lon])
             except KeyError:
-                u_np_lon.append(9999)
-                v_np_lon.append(9999)
+                u_np_lon.append(float("nan"))
+                v_np_lon.append(float("nan"))
                 
         u_np_lat.append(np.array(u_np_lon))
         v_np_lat.append(np.array(v_np_lon))
