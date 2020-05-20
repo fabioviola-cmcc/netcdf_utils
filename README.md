@@ -29,3 +29,8 @@ First, we convert the file to CSV, to be comfortable during the creation of the 
 Then, we invoke the python script to obtain the NetCDF:
 
 ```$ python  mdktxt_to_nc.py --inputFile=mdktxt_samples/relo19080520.csv --outputFile=mdktxt_samples/relo19080520.nc --time="2019-08-05 20:00"```
+
+## Date conversion
+
+```$ python dateconv.py 737564.125
+Tuesday, 19. May 2020 03:00AM```
