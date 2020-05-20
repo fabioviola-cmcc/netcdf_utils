@@ -32,5 +32,4 @@ Then, we invoke the python script to obtain the NetCDF:
 
 ## Date conversion
 
-```$ python dateconv.py 737564.125
-Tuesday, 19. May 2020 03:00AM```
+```$ python dateconv.py 737564.125```
